@@ -8,7 +8,7 @@ app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
 
 # File to store waitlist emails
-WAITLIST_FILE = 'waitlist_data.json'
+WAITLIST_FILE = os.environ.get('WAITLIST_FILE', 'waitlist_data.json')
 
 # Initialize waitlist file if it doesn't exist
 if not os.path.exists(WAITLIST_FILE):
@@ -73,4 +73,8 @@ def get_waitlist():
     })
 
 if __name__ == '__main__':
-    app.run(debug=True, port=8000) 
+    # Use environment variables for port with fallback to 8000
+    port = int(os.environ.get('PORT', 8000))
+    # Only use debug mode in development
+    debug = os.environ.get('FLASK_ENV', 'production') == 'development'
+    app.run(debug=debug, host='0.0.0.0', port=port) 
