@@ -40,15 +40,11 @@ waitlist_data.json
 .DS_Store
 Thumbs.db 
 
-<<<<<<< HEAD
-~*
-=======
 # videos and images
-*.mp4
+Videos/*.mp4
 *.avi
 *.mov
 *.mkv
-*.jpg
-*.jpeg
-*.png
->>>>>>> 87a5a21 (a)
+Photos/*.jpg
+Photos/*.jpeg
+Photos/*.png

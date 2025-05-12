@@ -215,6 +215,80 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Run once on load
     setTimeout(animateOnScroll, 100);
+
+    // Gallery logic (agnostic to number of files)
+    const galleryGrid = document.getElementById('gallery-grid');
+    const modal = document.getElementById('gallery-modal');
+    const modalImg = document.getElementById('gallery-modal-img');
+    const closeBtn = document.querySelector('.gallery-modal-close');
+
+    if (galleryGrid && modal && modalImg && closeBtn) {
+        const exts = ['jpg','jpeg','png','gif','webp'];
+        const MAX_IMAGES = 50;
+        let foundAny = false;
+        let tryCount = 0;
+        let lastScrollY = 0;
+
+        function tryLoadImage(idx, extIdx) {
+            if (extIdx >= exts.length) {
+                if (idx < MAX_IMAGES) tryLoadImage(idx+1, 0);
+                else if (!foundAny && tryCount >= MAX_IMAGES*exts.length) {
+                    galleryGrid.innerHTML = "<p>No images found in Gallery folder.</p>";
+                }
+                return;
+            }
+            tryCount++;
+            const img = new window.Image();
+            img.className = "gallery-thumb";
+            img.alt = `Gallery Image ${idx}`;
+            img.src = `Gallery/${idx}.${exts[extIdx]}`; // Set src first!
+            img.onload = function() {
+                foundAny = true;
+                galleryGrid.appendChild(img);
+                // Attach click handler only after image is loaded and appended
+                img.addEventListener('click', function() {
+                    lastScrollY = window.scrollY;
+                    document.body.style.position = 'fixed';
+                    document.body.style.top = `-${lastScrollY}px`;
+                    document.body.style.left = '0';
+                    document.body.style.right = '0';
+                    document.body.style.width = '100%';
+
+                    modal.style.display = "flex";
+                    modal.style.zIndex = "2000";
+                    modalImg.src = img.src;
+                    modalImg.alt = img.alt;
+                    modalImg.style.maxWidth = "90vw";
+                    modalImg.style.maxHeight = "80vh";
+                });
+                if (idx < MAX_IMAGES) tryLoadImage(idx+1, 0);
+            };
+            img.onerror = function() {
+                tryLoadImage(idx, extIdx+1);
+            };
+        }
+        tryLoadImage(1, 0);
+
+        function closeModal() {
+            modal.style.display = "none";
+            modalImg.src = "";
+            modalImg.alt = "";
+            // Restore scroll position and allow scrolling
+            document.body.style.position = '';
+            document.body.style.top = '';
+            document.body.style.left = '';
+            document.body.style.right = '';
+            document.body.style.width = '';
+            window.scrollTo(0, lastScrollY);
+        }
+
+        closeBtn.onclick = closeModal;
+        modal.onclick = function(e) {
+            if (e.target === modal) {
+                closeModal();
+            }
+        };
+    }
 });
 
 // Setup Parallax Background
@@ -459,4 +533,4 @@ function createCelebrationParticles() {
             createParticle(x, y);
         }, i * 50);
     }
-} 
+}
