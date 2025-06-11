@@ -1,6 +1,6 @@
-# Dreams - Smart Sleep Mask Waitlist
+# Dreams - Cognitive Wellness Ecosystem
 
-This is a landing page for the Dreams Smart Sleep Mask featuring a waitlist system that collects and stores email addresses.
+This repository contains the Dreamz website. The homepage introduces the company as a complete cognitive wellness ecosystem, while the product page showcases the Dreamz smart sleep mask with a waitlist system that collects and stores email addresses.
 
 ## Features
 
@@ -44,7 +44,8 @@ This is a landing page for the Dreams Smart Sleep Mask featuring a waitlist syst
 
 ## File Structure
 
-- `index.html` - The main landing page
+- `index.html` - Company homepage
+- `product.html` - Smart sleep mask product page
 - `styles.css` - CSS styles for the landing page
 - `script.js` - JavaScript for animations and UI effects
 - `app.py` - Flask server that handles API requests and serves static files
